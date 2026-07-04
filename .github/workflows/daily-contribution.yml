@@ -1,13 +1,10 @@
-
 name: Daily 11 Contributions
 
-on:
+"on":
   schedule:
-    # Every day at 6:00 PM IST = 12:30 PM UTC
     - cron: "30 12 * * *"
 
-  # Manual Run button
-  workflow_dispatch:
+  workflow_dispatch: {}
 
 permissions:
   contents: write
@@ -26,16 +23,19 @@ jobs:
           git config user.email "karantiger9369@gmail.com"
 
       - name: Create 11 commits
+        shell: bash
         run: |
-          for i in {1..11}
+          touch activity-log.txt
+
+          for i in $(seq 1 11)
           do
             echo "$(date -u '+%Y-%m-%d %H:%M:%S UTC') - Daily activity #$i" >> activity-log.txt
 
             git add activity-log.txt
-
             git commit -m "chore: daily activity update #$i"
+
+            sleep 1
           done
 
       - name: Push commits
-        run: |
-          git push
+        run: git push
